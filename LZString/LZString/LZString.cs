@@ -9,9 +9,7 @@ namespace LZString
         static string keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
         static string keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
         static Dictionary<string, Dictionary<char, int>> baseReverseDic = new Dictionary<string, Dictionary<char, int>>();
-        private delegate char GetCharFromInt(int a);
-        private static GetCharFromInt f = (a) => Convert.ToChar(a);
-        private delegate int GetNextValue(int index);
+        private static Func<int, char> f = Convert.ToChar;
 
         private static int getBaseValue(string alphabet, char character)
         {
@@ -112,7 +110,7 @@ namespace LZString
             return _compress(uncompressed, 16, f);
         }
 
-        private static string _compress(string uncompressed, int bitsPerChar, GetCharFromInt getCharFromInt)
+        private static string _compress(string uncompressed, int bitsPerChar, Func<int, char> getCharFromInt)
         {
             if (uncompressed == null) return "";
             int i, value, ii, context_enlargeIn = 2, context_dictSize = 3, context_numBits = 2, context_data_val = 0, context_data_position = 0;
@@ -396,7 +394,7 @@ namespace LZString
         {
             public int val, position, index;
         }
-        private static string _decompress(int length, int resetValue, GetNextValue getNextValue)
+        private static string _decompress(int length, int resetValue, Func<int, int> getNextValue)
         {
             Dictionary<int, string> dictionary = new Dictionary<int, string>();
             int next, enlargeIn = 4, dictSize = 4, numBits = 3, i, bits, resb, maxpower, power;
