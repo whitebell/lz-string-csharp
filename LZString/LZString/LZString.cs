@@ -6,9 +6,9 @@ namespace LZString
 {
     public class LZString
     {
-        static string keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-        static string keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
-        static Dictionary<string, Dictionary<char, int>> baseReverseDic = new Dictionary<string, Dictionary<char, int>>();
+        private static string keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        private static string keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
+        private static Dictionary<string, Dictionary<char, int>> baseReverseDic = new Dictionary<string, Dictionary<char, int>>();
         private static Func<int, char> f = Convert.ToChar;
 
         private static int getBaseValue(string alphabet, char character)
@@ -389,11 +389,11 @@ namespace LZString
             return _decompress(compressed.Length, 32768, (index) => Convert.ToInt32(compressed[index]));
         }
 
-
         private struct dataStruct
         {
             public int val, position, index;
         }
+
         private static string _decompress(int length, int resetValue, Func<int, int> getNextValue)
         {
             Dictionary<int, string> dictionary = new Dictionary<int, string>();
