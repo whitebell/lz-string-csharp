@@ -114,7 +114,7 @@ namespace LZString
         {
             if (uncompressed == null) return "";
             int i, value, ii, context_enlargeIn = 2, context_dictSize = 3, context_numBits = 2, context_data_val = 0, context_data_position = 0;
-            Dictionary<string, bool> context_dictionaryToCreate = new Dictionary<string, bool>();
+            var context_dictionaryToCreate = new HashSet<string>();
             Dictionary<string, int> context_dictionary = new Dictionary<string, int>();
             StringBuilder context_data = new StringBuilder();
             string context_c ="";
@@ -126,7 +126,7 @@ namespace LZString
                 if(!context_dictionary.ContainsKey(context_c))
                 {
                     context_dictionary[context_c] = context_dictSize++;
-                    context_dictionaryToCreate[context_c] = true;
+                    context_dictionaryToCreate.Add(context_c);
                 }
                 context_wc = context_w + context_c;
                 if(context_dictionary.ContainsKey(context_wc))
@@ -135,7 +135,7 @@ namespace LZString
                 }
                 else
                 {
-                    if(context_dictionaryToCreate.ContainsKey(context_w))
+                    if(context_dictionaryToCreate.Contains(context_w))
                     {
                         if(Convert.ToInt32(context_w[0])<256)
                         {
@@ -246,7 +246,7 @@ namespace LZString
             //Output the code for w
             if(context_w!="")
             {
-                if(context_dictionaryToCreate.ContainsKey(context_w))
+                if(context_dictionaryToCreate.Contains(context_w))
                 {
                     if(Convert.ToInt32(context_w[0])<256)
                     {
