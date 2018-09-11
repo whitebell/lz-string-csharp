@@ -6,10 +6,10 @@ namespace LZString
 {
     public class LZString
     {
-        private static string KeyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-        private static string KeyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
-        private static Dictionary<string, Dictionary<char, int>> BaseReverseDic = new Dictionary<string, Dictionary<char, int>>();
-        private static Func<int, char> GetCharFromInt = Convert.ToChar;
+        private const string KeyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        private const string KeyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
+        private static readonly Dictionary<string, Dictionary<char, int>> BaseReverseDic = new Dictionary<string, Dictionary<char, int>>();
+        private static readonly Func<int, char> GetCharFromInt = Convert.ToChar;
 
         private static int GetBaseValue(string alphabet, char character)
         {
