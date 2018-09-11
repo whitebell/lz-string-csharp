@@ -6,28 +6,28 @@ namespace LZString
 {
     public class LZString
     {
-        private static string keyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-        private static string keyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
-        private static Dictionary<string, Dictionary<char, int>> baseReverseDic = new Dictionary<string, Dictionary<char, int>>();
-        private static Func<int, char> f = Convert.ToChar;
+        private static string KeyStrBase64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+        private static string KeyStrUriSafe = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+-$";
+        private static Dictionary<string, Dictionary<char, int>> BaseReverseDic = new Dictionary<string, Dictionary<char, int>>();
+        private static Func<int, char> GetCharFromInt = Convert.ToChar;
 
-        private static int getBaseValue(string alphabet, char character)
+        private static int GetBaseValue(string alphabet, char character)
         {
-            if(!baseReverseDic.ContainsKey(alphabet))
+            if(!BaseReverseDic.ContainsKey(alphabet))
             {
-                baseReverseDic[alphabet] = new Dictionary<char, int>();
+                BaseReverseDic[alphabet] = new Dictionary<char, int>();
                 for (int i = 0; i < alphabet.Length; i++)
                 {
-                    baseReverseDic[alphabet][alphabet[i]] = i;
+                    BaseReverseDic[alphabet][alphabet[i]] = i;
                 }
             }
-            return baseReverseDic[alphabet][character];
+            return BaseReverseDic[alphabet][character];
         }
 
-        public static string compressToBase64(string input)
+        public static string CompressToBase64(string input)
         {
             if (input == null) return "";
-            string res = _compress(input, 6, (a) => keyStrBase64[a]);
+            string res = Compress(input, 6, (a) => KeyStrBase64[a]);
             switch (res.Length%4)
             {
                 case 0: return res;
@@ -38,29 +38,29 @@ namespace LZString
             return null;
         }
 
-        public static string decompressFromBase64(string input)
+        public static string DecompressFromBase64(string input)
         {
             if (input == null) return "";
             if (input == "") return null;
-            return _decompress(input.Length, 32, (index) => getBaseValue(keyStrBase64, input[index]));
+            return Decompress(input.Length, 32, (index) => GetBaseValue(KeyStrBase64, input[index]));
         }
 
-        public static string compressToUTF16(string input)
+        public static string CompressToUTF16(string input)
         {
             if (input == null) return "";
-            return _compress(input, 15, (a) => f(a + 32)) + " ";
+            return Compress(input, 15, (a) => GetCharFromInt(a + 32)) + " ";
         }
 
-        public static string decompressFromUTF16(string compressed)
+        public static string DecompressFromUTF16(string compressed)
         {
             if (compressed == null) return "";
             if (compressed == "") return null;
-            return _decompress(compressed.Length, 16384, index => Convert.ToInt32(compressed[index]) - 32);
+            return Decompress(compressed.Length, 16384, index => Convert.ToInt32(compressed[index]) - 32);
         }
 
-        public static byte[] compressToUint8Array(string uncompressed)
+        public static byte[] CompressToByteArray(string uncompressed)
         {
-            string compressed = compress(uncompressed);
+            string compressed = Compress(uncompressed);
             byte[] buf = new byte[compressed.Length * 2];
 
             for (int i = 0, TotalLen = compressed.Length; i < TotalLen; i++)
@@ -72,7 +72,7 @@ namespace LZString
             return buf;
         }
 
-        public static string decompressFromUint8Array(byte[] compressed)
+        public static string DecompressFromByteArray(byte[] compressed)
         {
             if (compressed == null) return "";
             else
@@ -85,32 +85,32 @@ namespace LZString
                 char[] result = new char[buf.Length];
                 for (int i = 0; i < buf.Length; i++)
                 {
-                    result[i] = f(buf[i]);
+                    result[i] = GetCharFromInt(buf[i]);
                 }
-                return decompress(new string(result));
+                return Decompress(new string(result));
             }
         }
 
-        public static string compressToEncodedURIComponent(string input)
+        public static string CompressToEncodedUriComponent(string input)
         {
             if (input == null) return "";
-            return _compress(input, 6, (a) => keyStrUriSafe[a]);
+            return Compress(input, 6, (a) => KeyStrUriSafe[a]);
         }
 
-        public static string decompressFromEncodedURIComponent(string input)
+        public static string DecompressFromEncodedUriComponent(string input)
         {
             if (input == null) return "";
             if (input == "") return null;
             input = input.Replace(' ', '+');
-            return _decompress(input.Length, 32, (index) => getBaseValue(keyStrUriSafe, input[index]));
+            return Decompress(input.Length, 32, (index) => GetBaseValue(KeyStrUriSafe, input[index]));
         }
 
-        public static string compress(string uncompressed)
+        public static string Compress(string uncompressed)
         {
-            return _compress(uncompressed, 16, f);
+            return Compress(uncompressed, 16, GetCharFromInt);
         }
 
-        private static string _compress(string uncompressed, int bitsPerChar, Func<int, char> getCharFromInt)
+        private static string Compress(string uncompressed, int bitsPerChar, Func<int, char> getCharFromInt)
         {
             if (uncompressed == null) return "";
             int i, value, ii, context_enlargeIn = 2, context_dictSize = 3, context_numBits = 2, context_data_val = 0, context_data_position = 0;
@@ -382,26 +382,26 @@ namespace LZString
             return context_data.ToString();
         }
 
-        public static string decompress(string compressed)
+        public static string Decompress(string compressed)
         {
             if (compressed == null) return "";
             if (compressed == "") return null;
-            return _decompress(compressed.Length, 32768, (index) => Convert.ToInt32(compressed[index]));
+            return Decompress(compressed.Length, 32768, (index) => Convert.ToInt32(compressed[index]));
         }
 
-        private struct dataStruct
+        private struct DataStruct
         {
             public int val, position, index;
         }
 
-        private static string _decompress(int length, int resetValue, Func<int, int> getNextValue)
+        private static string Decompress(int length, int resetValue, Func<int, int> getNextValue)
         {
             Dictionary<int, string> dictionary = new Dictionary<int, string>();
             int next, enlargeIn = 4, dictSize = 4, numBits = 3, i, bits, resb, maxpower, power;
             int c = 0;
             string entry = "", w;
             StringBuilder result = new StringBuilder();
-            var data = new dataStruct(){ val = getNextValue(0), position = resetValue, index = 1 };
+            var data = new DataStruct(){ val = getNextValue(0), position = resetValue, index = 1 };
 
             for (i = 0; i < 3; i++)
             {
@@ -442,7 +442,7 @@ namespace LZString
                         bits |= (resb > 0 ? 1 : 0) * power;
                         power <<= 1;
                     }
-                    c = Convert.ToInt32(f(bits));
+                    c = Convert.ToInt32(GetCharFromInt(bits));
                     break;
                 case 1:
                     bits = 0;
@@ -460,7 +460,7 @@ namespace LZString
                         bits |= (resb > 0 ? 1 : 0) * power;
                         power <<= 1;
                     }
-                    c = Convert.ToInt32(f(bits));
+                    c = Convert.ToInt32(GetCharFromInt(bits));
                     break;
                 case 2:
                     return "";
@@ -510,7 +510,7 @@ namespace LZString
                             power <<= 1;
                         }
 
-                        dictionary[dictSize++] = f(bits).ToString();
+                        dictionary[dictSize++] = GetCharFromInt(bits).ToString();
                         c = dictSize - 1;
                         enlargeIn--;
                         break;
@@ -530,7 +530,7 @@ namespace LZString
                             bits |= (resb > 0 ? 1 : 0) * power;
                             power <<= 1;
                         }
-                        dictionary[dictSize++] = f(bits).ToString();
+                        dictionary[dictSize++] = GetCharFromInt(bits).ToString();
                         c = dictSize - 1;
                         enlargeIn--;
                         break;
