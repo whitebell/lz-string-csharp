@@ -381,19 +381,11 @@ namespace LZString
             }
 
             //Flush the last char
-            while (true)
+            do
             {
                 context_data_val <<= 1;
-                if (context_data_position == bitsPerChar - 1)
-                {
-                    context_data.Append(getCharFromInt(context_data_val));
-                    break;
-                }
-                else
-                {
-                    context_data_position++;
-                }
-            }
+            } while (context_data_position++ != bitsPerChar - 1);
+            context_data.Append(getCharFromInt(context_data_val));
 
             return context_data.ToString();
         }
