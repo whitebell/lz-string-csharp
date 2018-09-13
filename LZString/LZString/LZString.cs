@@ -219,7 +219,7 @@ namespace LZString
                         context_enlargeIn--;
                         if (context_enlargeIn == 0)
                         {
-                            context_enlargeIn = (int)Math.Pow(2, context_numBits);
+                            context_enlargeIn = 1 << context_numBits;
                             context_numBits++;
                         }
                         context_dictionaryToCreate.Remove(context_w);
@@ -246,7 +246,7 @@ namespace LZString
                     context_enlargeIn--;
                     if (context_enlargeIn == 0)
                     {
-                        context_enlargeIn = (int)Math.Pow(2, context_numBits);
+                        context_enlargeIn = 1 << context_numBits;
                         context_numBits++;
                     }
                     //Add wc to the dictionary
@@ -330,7 +330,7 @@ namespace LZString
                     context_enlargeIn--;
                     if (context_enlargeIn == 0)
                     {
-                        context_enlargeIn = (int)Math.Pow(2, context_numBits);
+                        context_enlargeIn = 1 << context_numBits;
                         context_numBits++;
                     }
                     context_dictionaryToCreate.Remove(context_w);
@@ -357,7 +357,7 @@ namespace LZString
                 context_enlargeIn--;
                 if (context_enlargeIn == 0)
                 {
-                    context_enlargeIn = (int)Math.Pow(2, context_numBits);
+                    context_enlargeIn = 1 << context_numBits;
                     context_numBits++;
                 }
             }
@@ -417,7 +417,7 @@ namespace LZString
                 dictionary[i] = ((char)i).ToString();
 
             bits = 0;
-            maxpower = (int)Math.Pow(2, 2);
+            maxpower = 4;
             power = 1;
             while (power != maxpower)
             {
@@ -436,7 +436,7 @@ namespace LZString
             {
                 case 0:
                     bits = 0;
-                    maxpower = (int)Math.Pow(2, 8);
+                    maxpower = 256;
                     power = 1;
                     while (power != maxpower)
                     {
@@ -454,7 +454,7 @@ namespace LZString
                     break;
                 case 1:
                     bits = 0;
-                    maxpower = (int)Math.Pow(2, 16);
+                    maxpower = 65536;
                     power = 1;
                     while (power != maxpower)
                     {
@@ -482,7 +482,7 @@ namespace LZString
                     return "";
 
                 bits = 0;
-                maxpower = (int)Math.Pow(2, numBits);
+                maxpower = 1 << numBits;
                 power = 1;
                 while (power != maxpower)
                 {
@@ -501,7 +501,7 @@ namespace LZString
                 {
                     case 0:
                         bits = 0;
-                        maxpower = (int)Math.Pow(2, 8);
+                        maxpower = 256;
                         power = 1;
                         while (power != maxpower)
                         {
@@ -522,7 +522,7 @@ namespace LZString
                         break;
                     case 1:
                         bits = 0;
-                        maxpower = (int)Math.Pow(2, 16);
+                        maxpower = 65536;
                         power = 1;
                         while (power != maxpower)
                         {
@@ -546,7 +546,7 @@ namespace LZString
 
                 if (enlargeIn == 0)
                 {
-                    enlargeIn = (int)Math.Pow(2, numBits);
+                    enlargeIn = 1 << numBits;
                     numBits++;
                 }
 
@@ -565,7 +565,7 @@ namespace LZString
                 w = entry;
                 if (enlargeIn == 0)
                 {
-                    enlargeIn = (int)Math.Pow(2, numBits);
+                    enlargeIn = 1 << numBits;
                     numBits++;
                 }
             }
