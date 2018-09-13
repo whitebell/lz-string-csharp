@@ -213,7 +213,7 @@ namespace LZString
                                 {
                                     context_data_position++;
                                 }
-                                value = value >> 1;
+                                value >>= 1;
                             }
                         }
                         context_enlargeIn--;
