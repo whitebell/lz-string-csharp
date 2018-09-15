@@ -89,13 +89,9 @@ namespace LZString
             if (compressed == null)
                 return "";
 
-            var buf = new int[compressed.Length / 2];
-            for (var i = 0; i < buf.Length; i++)
-                buf[i] = (compressed[i * 2] * 256) + compressed[(i * 2) + 1];
-
-            var result = new char[buf.Length];
-            for (int i = 0; i < buf.Length; i++)
-                result[i] = (char)buf[i];
+            var result = new char[compressed.Length / 2];
+            for (var i = 0; i < result.Length; i++)
+                result[i] = (char)(compressed[i * 2] << 8 | compressed[(i * 2) + 1]);
 
             return Decompress(new string(result));
         }
