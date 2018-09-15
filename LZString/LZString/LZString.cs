@@ -52,13 +52,7 @@ namespace LZString
             return Decompress(input.Length, 32, index => GetBaseValue(KeyStrBase64, input[index]));
         }
 
-        public static string CompressToUTF16(string input)
-        {
-            if (input == null)
-                return "";
-
-            return Compress(input, 15, a => (char)(a + 32)) + " ";
-        }
+        public static string CompressToUTF16(string input) => Compress(input, 15, a => (char)(a + 32)) + " ";
 
         public static string DecompressFromUTF16(string compressed)
         {
@@ -96,12 +90,7 @@ namespace LZString
             return Decompress(new string(result));
         }
 
-        public static string CompressToEncodedUriComponent(string input)
-        {
-            if (input == null)
-                return "";
-            return Compress(input, 6, a => KeyStrUriSafe[a]);
-        }
+        public static string CompressToEncodedUriComponent(string input) => Compress(input, 6, a => KeyStrUriSafe[a]);
 
         public static string DecompressFromEncodedUriComponent(string input)
         {
