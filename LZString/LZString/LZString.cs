@@ -30,16 +30,15 @@ namespace LZString
             var res = Compress(input, 6, a => KeyStrBase64[a]);
             switch (res.Length % 4)
             {
-                case 0:
-                    return res;
                 case 1:
                     return res + "===";
                 case 2:
                     return res + "==";
                 case 3:
                     return res + "=";
+                default:
+                    return res;
             }
-            return null;
         }
 
         public static string DecompressFromBase64(string input)
