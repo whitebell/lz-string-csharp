@@ -51,7 +51,14 @@ namespace LZString
             return Decompress(input.Length, 32, index => GetBaseValue(KeyStrBase64, input[index]));
         }
 
-        public static string CompressToUTF16(string input) => Compress(input, 15, a => (char)(a + 32)) + " ";
+        public static string CompressToUTF16(string input)
+        {
+            if (input == null)
+                return "";
+
+            return Compress(input, 15, a => (char)(a + 32)) + " ";
+        }
+
 
         public static string DecompressFromUTF16(string compressed)
         {
